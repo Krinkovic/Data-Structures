@@ -18,16 +18,7 @@
  *   (it can be first name, last name or both names)
  * - A pointer to the next node of a list.
  */
-typedef struct {
-    char last[20];
-    char first[20];
-} NAME;
-
-struct node {
-    int phone;
-    NAME name;
-    struct node *next;
-};
+struct node;
 
 /*
  * Displays all records in the telephone directory.
