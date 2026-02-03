@@ -17,13 +17,6 @@ int delete_record(struct node **start);
 struct node *query_directory(struct node *start, int option);
 void delete_directory(struct node **start);
 
-// Test Phone Book
-// struct node entr5 = {"7692927375", "Erik", NULL};
-// struct node entr4 = {"8597989854", "Anders", &entr5};
-// struct node entr3 = {"7625257489", "Klas", &entr4};
-// struct node entr2 = {"7373938472", "Anna", &entr3};
-// struct node entr1 = {"0739332436", "Kristoffer", &entr2};
-
 int main()
 {
   struct node *start = NULL;
@@ -77,6 +70,9 @@ int main()
         break;
       case 3:
         delete_record(&start);
+        display(start);
+        puts("----------------------------------");
+        puts("");
         break;
       case 4:
         puts("1. Search by number");
@@ -93,8 +89,14 @@ int main()
         puts("----------------------------------");
         puts("");
         break;
-      case 0:
+      case 5:
         delete_directory(&start);
+        break;
+      case 0:
+        if (start != NULL) {
+          delete_directory(&start);
+        }
+        puts("Goodbye");
         return 0;
     }
   } while (input != 0);
@@ -174,7 +176,6 @@ int delete_record(struct node **start) {
         }
         free(current);
         puts("Entry deleted.");
-        puts("----------------------------------");
         puts("");
         return 0;
       }
@@ -195,7 +196,6 @@ int delete_record(struct node **start) {
         }
         free(current);
         puts("Entry deleted.");
-        puts("----------------------------------");
         puts("");
         return 0;
       }
@@ -241,12 +241,15 @@ struct node *query_directory(struct node *start, int option)
 
 void delete_directory(struct node **start)
 {
-  struct node *prev = *start;
   struct node *current = *start;
+  struct node *prev = NULL;
   while (current != NULL) {
     prev = current;
     current = current->next;
     free(prev);
   }
+  *start = NULL;
   puts("Records cleared.");
+  puts("----------------------------------");
+  puts("");
 }
