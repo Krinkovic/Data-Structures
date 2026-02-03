@@ -8,8 +8,6 @@
 //declare linked list node for stack
 struct node
 {
-    //data is a character
-    //we will build the parenthese checker on the top of this stack
     char data;
     struct node *next;
 };
@@ -64,24 +62,20 @@ int main()
                 printf("\n Enter the character to be pushed on stack ");
                 scanf(" %c", &val);
                 printf("\n You entered: %c\n", val);
-                //TO DO: implement the PUSH operation
                 top = push(top, val);
                 break;
 
             case 2:
-                //TO DO: implement the POP operation
                 top = pop(top);
                 break;
 
             case 3:
-                //TO DO: implement the PEEK operation
                 val = peek(top);
                 if(val != -1)
                     printf("\n The value at the top of stack is : %c", val);
                 break;
 
             case 4:
-                //TO DO: : implement the DISPLAY operation
                 display(top);
                 break;
         }
@@ -92,49 +86,67 @@ int main()
 }
 
 
+struct node *push(struct node *top, char val){
 
-//TODO: implement the functions for the common operations on stack
-//
-// - [ ] Push
-// - [ ] Pop
-// - [ ] Peek
-// - [ ] Display
+    //create new node
+    struct node *ptr;
+    ptr = malloc(sizeof(struct node));
+    ptr->data =val;
 
-struct node *push(struct node *t, char v)
-{
-    struct node *new_node = malloc(sizeof(struct node));
-    new_node->data = v;
-    new_node->next = t;
-    return new_node;
+    //when the stack is empty
+    if(top == NULL)
+    {
+        ptr->next = NULL;
+        top = ptr;
+    }
+    else{
+        ptr->next = top;
+        top = ptr;
+    }
+
+    return top;
 }
 
-struct node *pop(struct node *t)
-{
-    if (t == NULL) {
-        printf("Stack is empty.\n");
-        return t;
+struct node *pop(struct node *top){
+
+    //ptr is used to free the current topmost element in the stack
+    struct node *ptr;
+    ptr = top;
+
+    if(top == NULL)
+        printf("\n STACK UNDERFLOW");
+    else{
+        top = top->next;
+        printf("\n The value being deleted is : %c", ptr->data);
+        free(ptr);
     }
-    printf("Popping: %c\n", t->data);
-    struct node *ptr = t->next;
-    free(t);
-    if (ptr == NULL) {
-        printf("Stack is now empty.\n");
-    }
-    return ptr;
+
+    return top;
 }
 
-char peek(struct node *t)
-{
-    return t->data;
+char peek(struct node *top){
+
+    if(top == NULL){
+        printf("\n STACK UNDERFLOW");
+        return -1;
+    }else{
+        return top->data;
+    }
 }
 
-void display(struct node *t)
-{
-    if (t == NULL) {
-        printf("Stack is empty.\n");
-    }
-    else while (t != NULL) {
-        printf("%c\n", t->data);
-        t = t->next;
+void display(struct node *top){
+
+    struct node *ptr;
+    ptr = top;
+
+    if(top == NULL)
+        printf("\n STACK IS EMPTY");
+    else{
+        printf("\n");
+        while(ptr != NULL){
+            printf("%c \n", ptr->data);
+            ptr = ptr->next;
+        }
     }
 }
+
