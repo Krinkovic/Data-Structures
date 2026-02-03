@@ -1,0 +1,13 @@
+Please attempt the following exercises independently before reviewing the solutions.
+
+1. Implement a program to create a singly linked list.
+
+2. Extend your program to display the linked list on the console.
+
+3. Implement insertion at the beginning of the list. Test it using your code from tasks (1) and (2).
+
+4. Implement insertion after a specified node. Test it using the existing code.
+
+5. Implement deletion from the beginning of the list. Test the deletion using tasks (1) and (2).
+
+6. Implement deletion from the end of the list. Again, test it using the earlier tasks.

@@ -1,0 +1,21 @@
+Please start with the supplied codes, and try the following exercises independently before reviewing the solutions.
+
+1. Write a program to create a binary search tree
+2. Extend the program specified in (1) to display the created binary search tree using in-order
+traversal in a console window.
+3. Extend the program specified in (1) and (2) to perform insertion of an element into a
+binary search tree. The value of an element is to be entered in a console window.
+4. Write a program to find the largest element in a binary search tree. To check that it works,
+add the code from (3).
+5. Write a program to count the total number of nodes in a binary search tree. To check that
+it works, add the code from (3).
+6. Write a program to determine the height of a binary search tree. To check that it works,
+add the code from (3).
+7. Write a program to find a mirror image of a binary search tree. The value of an element is
+to be entered in a console window. To check that it works, add the code from (3).
+8. Write a program to perform deletion of the entire binary search tree. To check that it
+works, add the code from (3).
+9. Write program to perform deletion of an element in a binary search tree. The value of an
+element is to be entered in a console window. To check that it works, add the code from
+(4).
+
