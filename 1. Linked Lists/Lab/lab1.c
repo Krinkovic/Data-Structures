@@ -5,7 +5,7 @@
 #include <string.h>
 #include "lab_lists.h"
 
-struct node{
+struct node {
     char phone[11];
     char name[50];
     struct node *next;

@@ -1,15 +1,16 @@
 // Exercise 3 Stacks and Queues (Spring 2022)
 // 3. Write a program to implement a queue using array.
 //
-// Implement the program by completing the functions in this supplied code. 
+// Implement the program by completing the functions in this supplied code.
 //
 
+#include <stddef.h>
 #include <stdio.h>
 
-#define MAX 10
+#define MAX 3
 
-//create an empty queue 
-int queue[MAX]; 
+//create an empty queue
+int queue[MAX];
 int front = -1, rear = -1;
 
 //declare the functions for the common operations on queue
@@ -64,3 +65,50 @@ int main()
 }
 
 //TODO: implement the functions for the common operations on queue
+//
+// - [ ] enqueue
+// - [ ] dequeue
+// - [ ] display
+
+void enqueue(int v)
+{
+    if (front == -1) {
+        front = 0;
+        rear = 0;
+    } else if (rear == MAX - 1) {
+        printf("\nQueue is full.\n");
+        return;
+    } else {
+        rear += 1;
+    }
+    queue[rear] = v;
+}
+
+int dequeue(void)
+{
+    int v;
+    if (front == -1) {
+        printf("\nQueue is empty.\n");
+    } else if (rear == front) {
+        v = queue[front];
+        rear = -1;
+        front = -1;
+    } else {
+        v = queue[front];
+        front += 1;
+    }
+    printf("\nValue removed from queue: %d\n", v);
+    return v;
+}
+
+void display(void)
+{
+    if (front == -1) {
+        printf("\nQueue is empty.\n");
+    } else {
+        puts("");
+        for (size_t i = front; i <= rear; i++) {
+            printf("%d\n", queue[i]);
+        }
+    }
+}

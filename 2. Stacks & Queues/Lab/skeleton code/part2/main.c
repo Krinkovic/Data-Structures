@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <string.h>
 #include "queue.h"
 
@@ -37,7 +37,7 @@ int main(void) {
                 continue;
             }
 
-            // TODO: enqueue job id at the rear of the queue
+            queue_enqueue(q, id);
             printf("Job %s arrived.\n", id);
 
         } else if (strcmp(cmd, "serve") == 0) {
@@ -47,8 +47,7 @@ int main(void) {
 
             } else {
 
-                // TODO: remove front job and store it in id
-                // char id[32];
+                queue_dequeue(q, id, 32);
                 printf("Serving: %s\n", id);
             }
 
@@ -57,14 +56,14 @@ int main(void) {
             if (queue_is_empty(q)) {
                 printf("Queue is empty.\n");
             } else {
-                
-                // TODO: copy front job into id (but do NOT remove it)
-                printf("Front: %s\n", id);
+
+                queue_front(q, id, 32);
+                printf("\nFront: %s\n\n", id);
             }
 
         } else if (strcmp(cmd, "print") == 0) {
 
-            // TODO: print the entire queue from front to rear
+            queue_print(q);
 
         } else if (strcmp(cmd, "exit") == 0) {
             break;

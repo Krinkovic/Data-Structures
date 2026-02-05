@@ -95,10 +95,10 @@ int main()
 
 //TODO: implement the functions for the common operations on stack
 //
-// - [ ] Push
-// - [ ] Pop
-// - [ ] Peek
-// - [ ] Display
+// - [X] Push
+// - [X] Pop
+// - [X] Peek
+// - [X] Display
 
 struct node *push(struct node *t, char v)
 {

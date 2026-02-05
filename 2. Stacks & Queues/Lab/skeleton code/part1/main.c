@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <string.h>
 #include "stack.h"
 
@@ -35,23 +35,20 @@ int main(void) {
                 printf("Error: expected a character after 'do'.\n");
                 continue;
             }
-
-            // TODO: push c onto undo stack
-            // TODO: clear redo stack (hint: pop until empty)
+            stack_push(undo, c);
+            if (!stack_is_empty(redo)) {
+                while (stack_pop(redo) != '\0');
+            }
 
             printf("Typed: %c\n", c);
 
         } else if (strcmp(cmd, "undo") == 0) {
-
-            if (stack_is_empty(undo)) {
+                c = stack_pop(undo);
+            if (c == '\0') {
                 printf("Nothing to undo.\n");
             } else {
-
-                // TODO: remove top element from undo stack
-                // TODO: push it onto redo stack
-                // char ch = ...;
-
-                printf("Undo: removed %c\n", ch);
+                stack_push(redo, c);
+                printf("Undo: removed %c\n", c);
             }
 
         } else if (strcmp(cmd, "redo") == 0) {
@@ -59,18 +56,16 @@ int main(void) {
             if (stack_is_empty(redo)) {
                 printf("Nothing to redo.\n");
             } else {
-
-                // TODO: remove top element from redo stack
-                // TODO: push it onto undo stack
-                // char ch = ...;
-
+                char ch = stack_pop(redo);
+                stack_push(undo, ch);
                 printf("Redo: restored %c\n", ch);
             }
 
         } else if (strcmp(cmd, "print") == 0) {
-
-            // TODO: print both Undo and Redo stacks
-            // (students may write a helper print function)
+            puts("Undo stack:");
+            stack_print(undo);
+            puts("Redo stack:");
+            stack_print(redo);
 
         } else if (strcmp(cmd, "exit") == 0) {
             break;

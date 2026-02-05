@@ -13,7 +13,7 @@
 
 typedef struct stack *Stack;
 
-/* 
+/*
  * Create and return a new empty stack.
  * Return NULL if memory allocation fails.
  */
@@ -49,5 +49,11 @@ char stack_pop(Stack s);
  * Precondition: the stack is not empty.
  */
 char stack_top(Stack s);
+
+/*
+ * Print entire stack
+ * Precondition: the stack is not empty.
+ */
+void stack_print(Stack s);
 
 #endif
