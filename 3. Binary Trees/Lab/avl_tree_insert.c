@@ -6,15 +6,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "lab_binary_trees.h"
 
-// An enumeration emulating a boolean type
-typedef enum
-{
-    FALSE,
-    TRUE
-} bool;
-
-// A structure implementing a node of an AVL tree. 
+// A structure implementing a node of an AVL tree.
 struct node
 {
     int data;
@@ -38,7 +32,7 @@ struct node *insert(int data, struct node *tree, bool *ht_inc)
 {
     // ht_inc is a tricky variable. It is set to TRUE after a new node is inserted
     // as a leaf, which means that a re-balancing might be needed at a hihger
-    // level of a tree, where the critical node resides. When re-balancing is  
+    // level of a tree, where the critical node resides. When re-balancing is
     // done or will not be needed at a hihger level, ht_inc is set to FALSE.
     struct node *aptr, *bptr;
     if (tree == NULL)
@@ -194,6 +188,109 @@ void inorder(struct node *ptr)
         printf("% d", ptr->data);
         inorder(ptr->right);
     }
+}
+
+struct node *findLargestElement(struct node *tree)
+{
+    if ((tree == NULL) || (tree->right == NULL))
+        return tree;
+    else
+        return findLargestElement(tree->right);
+}
+
+struct node *deleteElement(int data, struct node *tree, boolean *ht_inc)
+{
+    struct node *aptr, *bptr;
+
+    if (tree == NULL)
+    {
+        printf("\n data not found in the tree \n");
+    }
+    else if (data < tree->data)
+    {
+        tree->left = deleteElement(data, tree->left, ht_inc);
+    }
+    else if (data > tree->data)
+    {
+        tree->right = deleteElement(data, tree->right, ht_inc);
+        if (*ht_inc == TRUE) {
+            switch (tree->balance) {
+                case -1: // Tree is right heavy and becomes balanced
+                    tree->balance = 0;
+                    break;
+                case 0: // Tree is balanced and becomes left heavy
+                    tree->balance = 1;
+                    *ht_inc = FALSE;
+                    break;
+                case 1: // Tree is left heavy and becomes more so
+                    aptr = tree->left;
+                    if (aptr->balance == 1) {
+                        puts("R1 Rotation");
+                        tree->right = aptr ->left;
+                        aptr->left = tree;
+                        tree->balance = 0;
+                        aptr->balance = 0;
+                        tree = aptr;
+                    } else if (aptr->balance == 0) {
+                        puts("R0 Rotation");
+                        tree->right = aptr ->left;
+                        aptr->left = tree;
+                        tree->balance = 1;
+                        aptr->balance = -1;
+                        tree = aptr;
+                    } else {
+                        puts("R-1 Rotation");
+                        bptr = aptr->left;
+                        aptr->left = bptr->right;
+                        bptr->right = aptr;
+                        tree->right = bptr->left;
+                        bptr->left = tree;
+                        if (bptr->balance == -1) {
+                            tree->balance = 1;
+                        } else {
+                            tree->balance = 0;
+                        }
+                        if (bptr->balance == 1) {
+                            aptr->balance = -1;
+                        } else {
+                            aptr->balance = 0;
+                        }
+                        bptr->balance = 0;
+                        tree = bptr;
+                    }
+                    *ht_inc = FALSE;
+            }
+        }
+    }
+    else // data == tree->data
+    {
+        if (tree->left && tree->right)
+        {
+            // Find the in-order predecessor
+            aptr = findLargestElement(tree->left);
+            tree->data = aptr->data;
+            // Delete the node of the in-order predecessor
+            tree->left = deleteElement(aptr->data, tree->left, ht_inc);
+        }
+        else // at least one child is absent
+        {
+            aptr = tree;
+            // no children - return NULL
+            if (tree->left == NULL && tree->right == NULL)
+                tree = NULL;
+            // if the node has a child (but not both)
+            // it is replaced by the child, which is returned
+            else if (tree->left != NULL)
+                tree = tree->left;
+            else
+                tree = tree->right;
+            // Delete the initial node
+            free(aptr);
+            puts("Element deleted successfully");
+            *ht_inc = TRUE;
+        }
+    }
+    return tree;
 }
 
 int main()
