@@ -1,3 +1,5 @@
+//Kristoffer 2026
+
 /******************************************************************
  * Lab 3. Binary Trees (TDRK12 Spring 2023)
  * This header file includes signatures of the functions and

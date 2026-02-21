@@ -1,3 +1,5 @@
+// Kristoffer 2026
+
 /* This source code is from the texbook Data Structures Using C, 2nd edition,
  * by Reema Thareja, Oxford University Press, 2014.
  * The detailed comments and references to the lecture slides are added by Vladimir Tarasov
@@ -17,18 +19,25 @@ struct node
     struct node *right;
 };
 
+// Test trees
+
+int testTree1[] = {45, 36, 63, 27, 39, 72, 37, 41}; // For R-1 rotation test
+int testTree2[] = {54, 45, 63, 39, 51, 65, 18, 47}; // For R0 rotation test
+int testTree3[] = {54, 45, 63, 39, 51, 65, 18}; // For R1 rotation test
+
 struct node *search(struct node *ptr, int data)
 {
-    if (ptr != NULL)
+    if (ptr != NULL) {
         if (data < ptr->data)
             ptr = search(ptr->left, data);
         else if (data > ptr->data)
             ptr = search(ptr->right, data);
+    }
     return (ptr);
 }
 
 // A function to insert a new element into an AVL tree.
-struct node *insert(int data, struct node *tree, bool *ht_inc)
+struct node *insert(int data, struct node *tree, boolean *ht_inc)
 {
     // ht_inc is a tricky variable. It is set to TRUE after a new node is inserted
     // as a leaf, which means that a re-balancing might be needed at a hihger
@@ -175,7 +184,7 @@ void display(struct node *ptr, int level)
         printf("\n");
         for (i = 0; i < level; i++)
             printf(" ");
-        printf("%d", ptr->data);
+        printf("%d(%d)", ptr->data, ptr->balance);
         display(ptr->left, level + 1);
     }
 }
@@ -208,7 +217,7 @@ struct node *deleteElement(int data, struct node *tree, boolean *ht_inc)
     }
     else if (data < tree->data)
     {
-        tree->left = deleteElement(data, tree->left, ht_inc);
+        puts("Deletion in left tree not implemented");
     }
     else if (data > tree->data)
     {
@@ -226,32 +235,32 @@ struct node *deleteElement(int data, struct node *tree, boolean *ht_inc)
                     aptr = tree->left;
                     if (aptr->balance == 1) {
                         puts("R1 Rotation");
-                        tree->right = aptr ->left;
-                        aptr->left = tree;
+                        tree->left = aptr ->right;
+                        aptr->right = tree;
                         tree->balance = 0;
                         aptr->balance = 0;
                         tree = aptr;
                     } else if (aptr->balance == 0) {
                         puts("R0 Rotation");
-                        tree->right = aptr ->left;
-                        aptr->left = tree;
+                        tree->left = aptr ->right;
+                        aptr->right = tree;
                         tree->balance = 1;
                         aptr->balance = -1;
                         tree = aptr;
                     } else {
                         puts("R-1 Rotation");
-                        bptr = aptr->left;
-                        aptr->left = bptr->right;
-                        bptr->right = aptr;
-                        tree->right = bptr->left;
-                        bptr->left = tree;
-                        if (bptr->balance == -1) {
-                            tree->balance = 1;
+                        bptr = aptr->right;
+                        aptr->right = bptr->left;
+                        bptr->left = aptr;
+                        tree->left = bptr->right;
+                        bptr->right = tree;
+                        if (bptr->balance == 1) {
+                            tree->balance = -1;
                         } else {
                             tree->balance = 0;
                         }
-                        if (bptr->balance == 1) {
-                            aptr->balance = -1;
+                        if (bptr->balance == -1) {
+                            aptr->balance = 1;
                         } else {
                             aptr->balance = 0;
                         }
@@ -295,30 +304,47 @@ struct node *deleteElement(int data, struct node *tree, boolean *ht_inc)
 
 int main()
 {
-    bool ht_inc;
+    boolean ht_inc;
     int data, num;
     struct node *root = NULL;
+
+    printf("Create tree from template?\n");
+    puts("1. No");
+    puts("2. R-1 Tree");
+    puts("3. R0 tree");
+    puts("4. R1 tree");
+    printf("input> ");
+    scanf(" %d", &num);
+    puts("");
+
+    if (num == 2) {
+        for (int i = 0; i < sizeof(testTree1)/sizeof(int); i++) {
+            root = insert(testTree1[i], root, &ht_inc);
+        }
+    } else if (num == 3) {
+        for (int i = 0; i < sizeof(testTree2)/sizeof(int); i++) {
+            root = insert(testTree2[i], root, &ht_inc);
+        }
+    } else if (num == 4) {
+        for (int i = 0; i < sizeof(testTree3)/sizeof(int); i++) {
+            root = insert(testTree3[i], root, &ht_inc);
+        }
+    }
+
     while (1)
     {
-        printf("1.Insert\n");
-        printf("2.Display\n");
-        printf("3.Quit\n");
+        printf("1.Display\n");
+        printf("2.Insert\n");
+        printf("3.Delete\n");
+        printf("0.Quit\n\n");
         printf("Enter your option : ");
         scanf("%d", &num);
         switch (num)
         {
         case 1:
-            printf("Enter the value to be inserted : ");
-            scanf("%d", &data);
-            if (search(root, data) == NULL)
-                root = insert(data, root, &ht_inc);
-            else
-                printf("Duplicate value ignored\n");
-            break;
-        case 2:
             if (root == NULL)
             {
-                printf("Tree is empty\n");
+                printf("\nTree is empty\n\n");
                 continue;
             }
             printf("Tree is :\n");
@@ -328,7 +354,23 @@ int main()
             inorder(root);
             printf("\n");
             break;
+        case 2:
+            printf("Enter the value to be inserted : ");
+            scanf("%d", &data);
+            if (search(root, data) == NULL)
+                root = insert(data, root, &ht_inc);
+            else
+                printf("Duplicate value ignored\n");
+            break;
         case 3:
+            printf("Enter the value to be deleted : ");
+            scanf("%d", &data);
+            if (search(root, data) == NULL)
+                printf("Value not found");
+            else
+                root = deleteElement(data, root, &ht_inc);
+            break;
+        case 0:
             exit(1);
         default:
             printf("Wrong option\n");
