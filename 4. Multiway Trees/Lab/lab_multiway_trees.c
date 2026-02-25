@@ -54,16 +54,39 @@ void traverse(struct node *tree, int level)
   }
 }
 
+/*
+search(tree, value)
+  if tree == Null
+    return NULL
+  for (i = 0; i < tree->keyCount; i++)
+    if value == tree->keys[i]
+      return tree
+    if value < tree->keys[i]
+      search(tree->children[i])
+  search(tree->children[keyCount])
+*/
 struct node *search(struct node *tree, int val)
 {
   if (tree == NULL) {
     return NULL;
   }
-
+  for (size_t i = 0; i < tree->keyCount; i++) {
+    // printf("%zu\n", i);
+    if (val == tree->keys[i]) {
+      return tree;
+    } else if (val < tree->keys[i]) {
+      return search(tree->children[i], val);
+    }
+  }
+  return search(tree->children[tree->keyCount], val);
 }
 
 int main(void)
 {
+  int input;
+  int value;
+  struct node *result;
+
   struct node *root;
 
   struct node *leafChildren[4] = {NULL, NULL, NULL, NULL};
@@ -92,5 +115,28 @@ int main(void)
   struct node *rootChildren[2] = {internal1, internal2};
   root = createNode(rootKeys, 1, rootChildren);
 
-  traverse(root, 1);
+  while (1) {
+    printf("\n");
+    printf("0. Exit\n");
+    printf("1. Display\n");
+    printf("2. Search\n");
+    scanf(" %d", &input);
+    switch (input) {
+      case 0:
+        return 0;
+      case 1:
+        traverse(root, 1);
+        break;
+      case 2:
+        printf("Value to search for: ");
+        scanf(" %d", &value);
+        result = search(root, value);
+        if (result == NULL) {
+          puts("Value not found");
+        } else {
+          printf("Found %d!\n", value);
+        }
+        break;
+    }
+  }
 }
