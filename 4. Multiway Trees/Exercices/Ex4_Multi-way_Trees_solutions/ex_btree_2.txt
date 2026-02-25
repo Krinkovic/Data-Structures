@@ -1,0 +1,16 @@
+// Exercise: Trees-2 (TDRK12 Spring 2022)
+// Task 2. Write an algorithm in pseudocode to traverse the tree using "inorder"
+//
+
+Traverse(TREE)
+
+Step 1: IF TREE = NULL
+            Return
+        [END OF IF]
+Step 2: Repeat Steps 3 to 4 while I < TREE->KEY_COUNT
+Step 3:     Traverse(TREE->CHILDREN[I])
+Step 4:     Write TREE->KEYS[I]
+        [END OF LOOP]
+Step 5: Traverse(TREE->CHILDREN[TREE->KEY_COUNT])
+STEP 6: END
+
