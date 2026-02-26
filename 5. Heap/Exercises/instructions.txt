@@ -1,0 +1,9 @@
+Write a program to implement a max binary heap by completing the supplied code in incomplete binary_heap.c .
+
+1. Complete the declaration of the structure.
+2. Implement the function for creating a heap.
+3. Implement the functions for destroying, printing a heap and finding the maximun key in a heap.
+4. Implement the function for inserting an element in the heap.
+5. Implement the function for deleting an element in the heap.
+
+Please start with the supplied code, and try the following exercises independently before reviewing the solutions.
