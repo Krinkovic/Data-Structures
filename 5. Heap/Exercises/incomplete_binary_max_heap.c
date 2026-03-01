@@ -5,8 +5,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
-#define MAX 5
+#define MAX 30
 
 //incomplete declaration to the structure
 struct maxheap {
@@ -57,6 +58,7 @@ int main(void) {
         printf("\n 4. DESTROY");
         printf("\n 5. DISPLAY");
         printf("\n 6. EXIT");
+        printf("\n 0. Create template");
         printf("\n Enter your option : ");
         scanf("%d", &option);
 
@@ -84,6 +86,26 @@ int main(void) {
             case 5:
                 print_heap(heap);
                 break;
+            case 0:
+                insert(heap, 10);
+                insert(heap, 5);
+                insert(heap, 23);
+                insert(heap, 2);
+                insert(heap, 7);
+                insert(heap, 14);
+                insert(heap, 1);
+                insert(heap, 18);
+                insert(heap, 55);
+                insert(heap, 3);
+                insert(heap, 25);
+                insert(heap, 0);
+                insert(heap, 100);
+                insert(heap, 70);
+                insert(heap, 24);
+                insert(heap, 22);
+                insert(heap, 35);
+                puts("template heap created");
+                break;
         }
     //while not choose to exit
     }while(option != 6);
@@ -109,7 +131,7 @@ struct maxheap *create_heap()
 //            key, the element to be inserted
 void insert(struct maxheap *h, int key)
 {
-    if (h->pos == h->array[h->max]) {
+    if (h->pos == h->max) {
         puts("Heap is full");
     } else {
         h->pos += 1;
@@ -125,7 +147,11 @@ void delete(struct maxheap *h)
     if (h->pos == h->array[0]) {
         puts("Heap is empty.");
     } else {
-
+        int x = h->array[1];
+        h->array[1] = h->array[h->pos];
+        h->pos--;
+        movedown(h, 1);
+        printf("Element %d deleted", x);
     }
 }
 //find the maximun value in a heap
@@ -146,31 +172,77 @@ void destroy_heap(struct maxheap *h)
     puts("Heap destroyed");
 }
 //prints the heap in the array
-//parameters: h, the pointer points to the heap.
-void print_heap(struct maxheap *h)
-{
-    if (h->pos == 0) {
-        puts("Heap is empty");
-    } else {
-        int i;
-        for (i = 1; i < MAX; i++) {
-            printf("%d, ", h->array[i]);
-        }
-        puts("");
-    }
-}
+// parameters: h, the pointer points to the heap.
+ // void print_heap(struct maxheap *h)
+ // {
+ //     if (h->pos == 0) {
+ //         puts("Heap is empty");
+ //     } else {
+ //         int i;
+ //         for (i = 1; i <= h->pos; i++) {
+ //             printf("%d, ", h->array[i]);
+ //         }
+ //         puts("");
+ //     }
+ // }
+ void print_heap(struct maxheap *h)
+ {
+     if (h->pos == 0) {
+         puts("Heap is empty");
+     } else {
+         int i;
+         int level = 0;
+         for (i = 1; i <= h->pos; i++) {
+             int log = floor(log2(i));
+             // printf("level: %d, log: %d", level, log);
+             if (log > level) {
+                 puts("");
+                 ++level;
+             }
+             printf("%d ", h->array[i]);
+         }
+         puts("");
+     }
+ }
 
 void moveup(struct maxheap *h, int pos)
 {
-    int val = h->array[pos];
-    int parent = h->array[h->pos / 2];
-    if (parent > val) {
-        h->array[h->pos / 2] = val;
-        h->array[h->pos] = parent;
-        moveup(h, parent);
+    int parentPos = pos / 2;
+    int key = h->array[pos];
+    int parentVal = h->array[parentPos];
+    if (parentVal < key && pos > 1) {
+        swap(h, pos, parentPos);
+        // h->array[parentPos] = key;
+        // h->array[pos] = parentVal;
+        moveup(h, parentPos);
     }
 }
 
-void movedown(struct maxheap *h, int k);
+void movedown(struct maxheap *h, int k)
+{
+    int left = 2 * k;
+    int right = left + 1;
 
-void swap(struct maxheap *h, int i, int j);
+    while (left <= h->pos) {
+        if (right <= h->pos && h->array[right] >= h->array[left] && h->array[right] > h->array[k]) {
+            swap(h, right, k);
+            k = right;
+        } else if (h->array[left] > h->array[k]) {
+            swap(h, left, k);
+            k = left;
+        } else {
+            break;
+        }
+
+        left = 2 * k;
+        right = left + 1;
+    }
+}
+
+void swap(struct maxheap *h, int i, int j)
+{
+    int temp;
+    temp = h->array[i];
+    h->array[i] = h->array[j];
+    h->array[j] = temp;
+}
