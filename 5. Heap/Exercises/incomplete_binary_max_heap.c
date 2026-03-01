@@ -5,8 +5,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include <threads.h>
+
+#define MAX 5
 
 //incomplete declaration to the structure
 struct maxheap {
@@ -98,7 +98,7 @@ int main(void) {
 struct maxheap *create_heap()
 {
     struct maxheap *heap = malloc(sizeof(*heap));
-    heap->max = 30;
+    heap->max = MAX;
     heap->pos = 0;
     heap->array = malloc(sizeof(int) * heap->max + 1);
     return heap;
@@ -109,22 +109,68 @@ struct maxheap *create_heap()
 //            key, the element to be inserted
 void insert(struct maxheap *h, int key)
 {
-
+    if (h->pos == h->array[h->max]) {
+        puts("Heap is full");
+    } else {
+        h->pos += 1;
+        h->array[h->pos] = key;
+        moveup(h, h->pos);
+    }
 }
 
 //delete an element
 //parameters: h, the pointer points to the heap.
-void delete(struct maxheap *h);
+void delete(struct maxheap *h)
+{
+    if (h->pos == h->array[0]) {
+        puts("Heap is empty.");
+    } else {
+
+    }
+}
 //find the maximun value in a heap
 //parameters: h, the pointer points to the heap.
-int findmax(struct maxheap *h);
+int findmax(struct maxheap *h)
+{
+    if (h->pos == 0) {
+        puts("Heap is empty");
+        return -1;
+    }
+    return h->array[1];
+}
 //destroy a heap and release the space allocated to the heap
 //parameters: h, the pointer points to the heap.
-void destroy_heap(struct maxheap *h);
+void destroy_heap(struct maxheap *h)
+{
+    free(h);
+    puts("Heap destroyed");
+}
 //prints the heap in the array
 //parameters: h, the pointer points to the heap.
-void print_heap(struct maxheap *h);
+void print_heap(struct maxheap *h)
+{
+    if (h->pos == 0) {
+        puts("Heap is empty");
+    } else {
+        int i;
+        for (i = 1; i < MAX; i++) {
+            printf("%d, ", h->array[i]);
+        }
+        puts("");
+    }
+}
 
-void moveup(struct maxheap *h, int pos);
+void moveup(struct maxheap *h, int pos)
+{
+    int val = h->array[pos];
+    int parent = h->array[h->pos / 2];
+    if (parent > val) {
+        h->array[h->pos / 2] = val;
+        h->array[h->pos] = parent;
+        moveup(h, parent);
+    }
+}
+
 void movedown(struct maxheap *h, int k);
+
 void swap(struct maxheap *h, int i, int j);
