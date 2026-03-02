@@ -46,13 +46,13 @@ void pq_destroy(PriorityQueue *pq)
 int pq_is_empty(const PriorityQueue *pq)
 {
     // Return 1 if size == 0
-    return 1; // TODO
+    return pq->size == 0;
 }
 
 int pq_is_full(const PriorityQueue *pq)
 {
     // Return 1 if size == capacity
-    return 0; // TODO
+    return pq->size == pq->capacity;
 }
 
 int pq_insert(PriorityQueue *pq, Task task)
@@ -61,14 +61,26 @@ int pq_insert(PriorityQueue *pq, Task task)
     // 2. Call heapify_up() to restore heap property
     //
     // Check the pseudocode for insertion in binary heap from lecture slides
-    return 0; // TODO
+    if (pq_is_full(pq) == 1) {
+        return -1;
+    } else {
+        pq->size++;
+        pq->data[pq->size] = task;
+        heapify_up(pq, pq->size);
+        return 0;
+    }
 }
 
 int pq_peek(const PriorityQueue *pq, Task *out)
 {
     // Return the root element (index 0)
     // Error if empty
-    return -1; // TODO
+    if (pq_is_empty(pq) == 1) {
+        return -1;
+    } else {
+        out = &pq->data[1];
+        return 0;
+    }
 }
 
 int pq_extract_min(PriorityQueue *pq, Task *out)
@@ -78,13 +90,28 @@ int pq_extract_min(PriorityQueue *pq, Task *out)
     // 3. Call heapify_down() to restore heap property
     //
     // Refer to deletion in binary heap pseudocode from lecture slides.
-    return -1; // TODO
+    if (pq_is_empty(pq) == 1) {
+        return -1;
+    } else {
+        out = &pq->data[0];
+        pq->data[0] = pq->data[pq->size];
+        pq->size--;
+        heapify_down(pq, 1);
+        return 0;
+    }
 }
 
 void pq_print(const PriorityQueue *pq)
 {
     // Print tasks in any consistent format
     // Heap order is acceptable (not sorted)
+    if (pq_is_empty(pq) == 1) {
+        puts("Queue is empty");
+    } else {
+        for (int i; i < pq->size; i++) {
+            task_print(&pq->data[i]);
+        }
+    }
 }
 
 static void heapify_up(PriorityQueue *pq, int index)
