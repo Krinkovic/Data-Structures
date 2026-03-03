@@ -120,6 +120,16 @@ static void heapify_up(PriorityQueue *pq, int index)
     // "Compare with parent; if heap property violated, swap and continue."
     //
     // Use task_compare() to determine priority.
+    Task *temp;
+    int pi = PARENT(index); // parent index
+    Task *parent = &pq->data[PARENT(index)];
+    Task *t = &pq->data[index];
+    if (task_compare(*t, *parent) < 0) {
+        temp = parent;
+        parent = t;
+        t = temp;
+        heapify_up(pq, pi);
+    }
 }
 
 static void heapify_down(PriorityQueue *pq, int index)
@@ -128,4 +138,27 @@ static void heapify_down(PriorityQueue *pq, int index)
     // "Compare parent with children; swap with smaller child if needed."
     //
     // Use task_compare() for priority comparisons.
+    Task *t = &pq->data[index];
+    Task *l = &pq->data[LEFT(index)];
+    Task *r = &pq->data[RIGHT(index)];
+    Task *temp;
+    int prio;
+    while (LEFT(index) <= pq->size) {
+        if (RIGHT(index) <= pq->size && prio <= 0 && task_compare(*r, *t) >= 0) {
+            temp = r;
+            r = t;
+            t = temp;
+            index = RIGHT(index);
+        } else if (task_compare(*l, *t) >= 0){
+            temp = l;
+            l = t;
+            t = temp;
+            index = LEFT(index);
+        } else {
+            break;
+        }
+
+        l = &pq->data[LEFT(index)];
+        r = &pq->data[RIGHT(index)];
+    }
 }
