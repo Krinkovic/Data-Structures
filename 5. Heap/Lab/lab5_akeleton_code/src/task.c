@@ -28,5 +28,5 @@ void task_print(const Task *t)
         return;
     }
     // TODO: adjust the format as you like
-    printf("Task %d: %d pages (arrival at %d)", t->id, t->pages, t->arrival_index);
+    printf("Task %d: %d pages (arrival at %d)\n", t->id, t->pages, t->arrival_index);
 }

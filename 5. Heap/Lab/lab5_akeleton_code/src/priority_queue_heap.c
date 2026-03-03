@@ -12,12 +12,13 @@ struct PriorityQueue {
     int capacity;
 };
 
-#define PARENT(i) ((i - 1) / 2)
-#define LEFT(i)   (2*i + 1)
-#define RIGHT(i)  (2*i + 2)
+#define PARENT(i) (i / 2)
+#define LEFT(i)   (2*i)
+#define RIGHT(i)  (2*i + 1)
 
 static void heapify_up(PriorityQueue *pq, int index);
 static void heapify_down(PriorityQueue *pq, int index);
+void swap(Task *a, Task *b);
 
 PriorityQueue* pq_create(int capacity)
 {
@@ -93,8 +94,8 @@ int pq_extract_min(PriorityQueue *pq, Task *out)
     if (pq_is_empty(pq) == 1) {
         return -1;
     } else {
-        out = &pq->data[0];
-        pq->data[0] = pq->data[pq->size];
+        out = &pq->data[1];
+        pq->data[1] = pq->data[pq->size];
         pq->size--;
         heapify_down(pq, 1);
         return 0;
@@ -108,7 +109,7 @@ void pq_print(const PriorityQueue *pq)
     if (pq_is_empty(pq) == 1) {
         puts("Queue is empty");
     } else {
-        for (int i; i < pq->size; i++) {
+        for (int i = 1; i <= pq->size; i++) {
             task_print(&pq->data[i]);
         }
     }
@@ -120,14 +121,13 @@ static void heapify_up(PriorityQueue *pq, int index)
     // "Compare with parent; if heap property violated, swap and continue."
     //
     // Use task_compare() to determine priority.
-    Task *temp;
+    if (index == 1) return;
+
     int pi = PARENT(index); // parent index
     Task *parent = &pq->data[PARENT(index)];
     Task *t = &pq->data[index];
     if (task_compare(*t, *parent) < 0) {
-        temp = parent;
-        parent = t;
-        t = temp;
+        swap(t, parent);
         heapify_up(pq, pi);
     }
 }
@@ -141,18 +141,14 @@ static void heapify_down(PriorityQueue *pq, int index)
     Task *t = &pq->data[index];
     Task *l = &pq->data[LEFT(index)];
     Task *r = &pq->data[RIGHT(index)];
-    Task *temp;
-    int prio;
     while (LEFT(index) <= pq->size) {
-        if (RIGHT(index) <= pq->size && prio <= 0 && task_compare(*r, *t) >= 0) {
-            temp = r;
-            r = t;
-            t = temp;
+        if (RIGHT(index) <= pq->size &&
+            task_compare(*l, *r) > 0 &&
+            task_compare(*r, *t) > 0) {
+            swap(r, t);
             index = RIGHT(index);
-        } else if (task_compare(*l, *t) >= 0){
-            temp = l;
-            l = t;
-            t = temp;
+        } else if (task_compare(*l, *t) > 0){
+            swap(l, t);
             index = LEFT(index);
         } else {
             break;
@@ -161,4 +157,11 @@ static void heapify_down(PriorityQueue *pq, int index)
         l = &pq->data[LEFT(index)];
         r = &pq->data[RIGHT(index)];
     }
+}
+
+void swap(Task *a, Task *b)
+{
+    Task temp = *a;
+    *a = *b;
+    *b = temp;
 }
