@@ -155,26 +155,6 @@ static void heapify_down(PriorityQueue *pq, int index)
         swap(&pq->data[index], &pq->data[smallest]);
         index = smallest;
     }
-    // Task *t = &pq->data[index];
-    // Task *l = &pq->data[LEFT(index)];
-    // Task *r = &pq->data[RIGHT(index)];
-    // while (LEFT(index) <= pq->size) {
-    //     if (RIGHT(index) <= pq->size &&
-    //         task_compare(*l, *r) > 0 &&
-    //         task_compare(*r, *t) > 0) {
-    //         swap(r, t);
-    //         index = RIGHT(index);
-    //     } else if (task_compare(*l, *t) > 0){
-    //         swap(l, t);
-    //         index = LEFT(index);
-    //     } else {
-    //         break;
-    //     }
-
-    //     t = &pq->data[index];
-    //     l = &pq->data[LEFT(index)];
-    //     r = &pq->data[RIGHT(index)];
-    // }
 }
 
 void swap(Task *a, Task *b)
