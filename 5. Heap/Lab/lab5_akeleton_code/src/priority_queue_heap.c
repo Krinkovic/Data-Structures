@@ -79,7 +79,7 @@ int pq_peek(const PriorityQueue *pq, Task *out)
     if (pq_is_empty(pq) == 1) {
         return -1;
     } else {
-        out = &pq->data[1];
+        *out = pq->data[1];
         return 0;
     }
 }
@@ -94,7 +94,7 @@ int pq_extract_min(PriorityQueue *pq, Task *out)
     if (pq_is_empty(pq) == 1) {
         return -1;
     } else {
-        out = &pq->data[1];
+        *out = pq->data[1];
         pq->data[1] = pq->data[pq->size];
         pq->size--;
         heapify_down(pq, 1);
@@ -138,25 +138,43 @@ static void heapify_down(PriorityQueue *pq, int index)
     // "Compare parent with children; swap with smaller child if needed."
     //
     // Use task_compare() for priority comparisons.
-    Task *t = &pq->data[index];
-    Task *l = &pq->data[LEFT(index)];
-    Task *r = &pq->data[RIGHT(index)];
     while (LEFT(index) <= pq->size) {
-        if (RIGHT(index) <= pq->size &&
-            task_compare(*l, *r) > 0 &&
-            task_compare(*r, *t) > 0) {
-            swap(r, t);
-            index = RIGHT(index);
-        } else if (task_compare(*l, *t) > 0){
-            swap(l, t);
-            index = LEFT(index);
-        } else {
+        int left = LEFT(index);
+        int right = RIGHT(index);
+        int smallest = index;
+
+        if (left <= pq->size && task_compare(pq->data[left], pq->data[smallest]) < 0) {
+            smallest = left;
+        }
+        if (right <= pq->size && task_compare(pq->data[right], pq->data[smallest]) < 0) {
+            smallest = right;
+        }
+        if (smallest == index) {
             break;
         }
-
-        l = &pq->data[LEFT(index)];
-        r = &pq->data[RIGHT(index)];
+        swap(&pq->data[index], &pq->data[smallest]);
+        index = smallest;
     }
+    // Task *t = &pq->data[index];
+    // Task *l = &pq->data[LEFT(index)];
+    // Task *r = &pq->data[RIGHT(index)];
+    // while (LEFT(index) <= pq->size) {
+    //     if (RIGHT(index) <= pq->size &&
+    //         task_compare(*l, *r) > 0 &&
+    //         task_compare(*r, *t) > 0) {
+    //         swap(r, t);
+    //         index = RIGHT(index);
+    //     } else if (task_compare(*l, *t) > 0){
+    //         swap(l, t);
+    //         index = LEFT(index);
+    //     } else {
+    //         break;
+    //     }
+
+    //     t = &pq->data[index];
+    //     l = &pq->data[LEFT(index)];
+    //     r = &pq->data[RIGHT(index)];
+    // }
 }
 
 void swap(Task *a, Task *b)
